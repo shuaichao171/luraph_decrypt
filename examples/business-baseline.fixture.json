@@ -1,0 +1,11 @@
+{
+  "kind": "loaded_mods",
+  "loaded_mods": [
+    "workshop-target"
+  ],
+  "probe_mod_values": true,
+  "probe_known_mod_methods": true,
+  "probe_known_mod_result_fields": true,
+  "probe_mod_manager_result_fields": true,
+  "mod_environment_missing_fields_are_nil": true
+}

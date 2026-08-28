@@ -10,7 +10,9 @@
 
 LPH 文本层可以无损解码，但解码结果不是原始 Lua。真正的还原工作是捕获虚拟机执行、恢复 opcode handler、生成指令级伪 Lua，再用窄夹具验证业务副作用并重写为高层业务 Lua。
 
-完整案例、字段证据和精度边界见 [RECOVERY.md](RECOVERY.md)。
+business 业务语义还原的完整操作流程见
+[BUSINESS_RECOVERY.md](BUSINESS_RECOVERY.md)；完整案例、字段证据和精度边界见
+[RECOVERY.md](RECOVERY.md)。
 
 ## 环境要求
 
@@ -28,12 +30,14 @@ LPH 文本层可以无损解码，但解码结果不是原始 Lua。真正的还
 ```text
 luraph/
   README.md                 本文件：方法、逻辑和快速使用
+  BUSINESS_RECOVERY.md      从 VM 产物到 business.lua 的证据化还原流程
   RECOVERY.md               当前项目的完整恢复记录
   run_recovery.ps1          恢复一个 Luraph Lua
   run_all.ps1               批量恢复一个目录中的 Lua
   run_probe.ps1             用 loaded-mod 夹具触发业务成功分支
   verify.ps1                运行工具测试和静态检查
   examples/
+    business-baseline.fixture.json 最小 business 查询基线
     fixture.example.json    loaded-mod 夹具结构示例
     environment.example.json 数据环境示例
   tools/
@@ -166,6 +170,9 @@ cd C:\Users\shuaichao\Desktop\1111\3787391869\luraph
 ### 9. 用窄夹具恢复业务语义
 
 `probe_business.py` 为目标模组逐项提供 `KnownModIndex`、`ModManager`、registry、API、组件和 metatable 方法。一次只改变一个条件，并比较：
+
+完整的 fixture 设计、A/B 实验、PATCH_SURFACE 判定、业务代码编写和合同测试流程见
+[BUSINESS_RECOVERY.md](BUSINESS_RECOVERY.md)。
 
 - API 调用参数和多返回值；
 - `debug.getupvalue/setupvalue`；
