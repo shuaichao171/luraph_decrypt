@@ -1,0 +1,16 @@
+{
+  "kind": "loaded_mods",
+  "loaded_mods": [
+    "workshop-test"
+  ],
+  "probe_mod_values": true,
+  "probe_mod_manager_result_fields": true,
+  "mod_environment_missing_fields_are_nil": true,
+  "mod_environment_fields": {
+    "API": {}
+  },
+  "probe_mod_seed_tables": true,
+  "record_fixture_probe_final_state": true,
+  "record_fixture_mod_environment_final_state": true,
+  "record_fixture_function_all_results": true
+}

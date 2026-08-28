@@ -1,0 +1,16 @@
+{
+  "PREFAB_SKINS": {
+    "target_prefab": [
+      "target_prefab_test_skin"
+    ]
+  },
+  "CHARACTERSKINS": {
+    "target_prefab_test_skin": {
+      "checkfn": "old",
+      "checkclientfn": "old",
+      "unlock": false,
+      "is_restricted": true
+    }
+  },
+  "ITEMSKINS": {}
+}
