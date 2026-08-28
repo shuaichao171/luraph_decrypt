@@ -28,10 +28,13 @@ business 业务语义还原的完整操作流程见
 ## 目录内容
 
 ```text
-luraph/
+luraph_decrypt/
   README.md                 本文件：方法、逻辑和快速使用
   BUSINESS_RECOVERY.md      从 VM 产物到 business.lua 的证据化还原流程
   RECOVERY.md               当前项目的完整恢复记录
+  business/                 10 份受版本控制的高层业务语义重建
+    README.md               业务文件索引、覆盖范围和验证方法
+    *.business.lua          人工证据约束的可读 Lua
   run_recovery.ps1          恢复一个 Luraph Lua
   run_all.ps1               批量恢复一个目录中的 Lua
   run_probe.ps1             用 loaded-mod 夹具触发业务成功分支
@@ -40,6 +43,9 @@ luraph/
     business-baseline.fixture.json 最小 business 查询基线
     fixture.example.json    loaded-mod 夹具结构示例
     environment.example.json 数据环境示例
+  run/                       本地输入和恢复产物，受 .gitignore 排除
+    code/                    待恢复的 Luraph Lua
+    recovered/               生成的 VM、CFG 和 readable 产物
   tools/
     luraph_recover.py       LPH 解码、隔离 Lua runtime、动态 VM trace
     luraph_devirtualize.py  VM 布局识别、opcode handler 静态裁剪
@@ -51,6 +57,7 @@ luraph/
     compact_programs.py     program IR 常量和指令行池化
     trace_modmain.py        非 LPH 单行 VM 的受限备用追踪器
   tests/
+    test_business_lua.py
     test_luraph_recover.py
     test_trace_modmain.py
 ```
@@ -60,26 +67,26 @@ luraph/
 恢复单个文件并生成 readable/CFG，再运行审计：
 
 ```powershell
-cd C:\Users\shuaichao\Desktop\1111\3787391869\luraph
+cd C:\Users\shuaichao\Desktop\ai-work\luraph_decrypt
 .\run_recovery.ps1 `
-    -Source ..\scripts\Legion.lua `
-    -OutputRoot ..\recovered
+    -Source .\run\code\Legion.lua `
+    -OutputRoot .\run\recovered
 ```
 
 批量恢复目录内所有 `.lua`：
 
 ```powershell
 .\run_all.ps1 `
-    -SourceDirectory ..\scripts `
-    -OutputRoot ..\recovered
+    -SourceDirectory .\run\code `
+    -OutputRoot .\run\recovered
 ```
 
 复用已有 program IR，只重新生成 handler/listing：
 
 ```powershell
 .\run_recovery.ps1 `
-    -Source ..\scripts\Legion.lua `
-    -OutputRoot ..\recovered `
+    -Source .\run\code\Legion.lua `
+    -OutputRoot .\run\recovered `
     -ReuseTrace
 ```
 
@@ -203,7 +210,7 @@ cd C:\Users\shuaichao\Desktop\1111\3787391869\luraph
 
 ```powershell
 .\run_probe.ps1 `
-    -Source ..\scripts\Xuaner_Myxl.lua `
+    -Source .\run\code\Xuaner_Myxl.lua `
     -Fixture .\examples\fixture.example.json `
     -Environment .\examples\environment.example.json `
     -InstructionUpvalue h `
@@ -216,7 +223,7 @@ cd C:\Users\shuaichao\Desktop\1111\3787391869\luraph
 ## 主要产物
 
 ```text
-recovered/
+run/recovered/
   <name>.recovered.lua                    指令级伪 Lua
   artifacts/decoded/<name>.lph.bin        LPH 无损解码结果
   artifacts/decompiled/<name>.root.source.lua
@@ -227,7 +234,8 @@ recovered/
   readable/<name>.readable.lua             完整可读控制流
   readable/<name>.focus.lua                领域相关 context 子集
   readable/<name>.observed.lua             已观察路径子集
-  readable/<name>.business.lua             人工证据约束的业务重建
+business/
+  <name>.business.lua                      人工证据约束的业务重建
 ```
 
 ## 常见错误

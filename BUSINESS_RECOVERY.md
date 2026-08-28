@@ -50,6 +50,10 @@ cd C:\Users\shuaichao\Desktop\ai-work\luraph_decrypt
 | environment JSON | 控制全局 registry、API、玩家和库存对象 |
 | 每次探针的 JSON 输出 | 保存直接动态证据 |
 
+本仓库已经在 `business/` 提供 10 份已完成的高层案例，并在
+`tests/test_business_lua.py` 提供对应合同测试；`run/recovered/` 仍用于本地
+生成可审计的 VM 中间产物。
+
 关键脚本：
 
 - `run_probe.ps1`：安全传递 UTF-8 fixture/environment，并运行探针；
@@ -361,7 +365,7 @@ buildgate=0 functions=9 set=1 init=1 reskin=1
 
 ### 6.3 高层重构映射
 
-Legion 的业务版可以按职责组织：
+仓库中的 [Legion 业务版](business/Legion.business.lua) 按以下职责组织：
 
 ```text
 is_legion_mod
@@ -419,7 +423,7 @@ VM 审计不能代替业务测试。每个 `*.business.lua` 应有项目专属�
 
 ```powershell
 uv run --no-project --with pytest --with lupa python -m pytest `
-    -q -p no:cacheprovider tests\test_business_legion.py
+    -q -p no:cacheprovider tests\test_business_lua.py
 ```
 
 测试中应保留原函数引用，并在第二轮修补后比较 `rawequal` 或 Lua 函数对象身份。
