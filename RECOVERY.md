@@ -123,7 +123,7 @@ VM fetch 追踪器不能粗暴替换 VM 所见的 `load`、`loadstring` 或 `deb
 
 ## 第二阶段：业务语义重建
 
-指令级 `readable.lua` 仍保留虚拟寄存器、PC 标签和大量 VM 控制流，因此不能直接视为可维护 Lua。第二阶段以这些文件和动态 trace 为证据，将代码重新组织成 `recovered/readable/*.business.lua`。发布仓库把这 10 份人工重建的可复核副本保存在 `business/*.business.lua`，并用 `tests/test_business_lua.py` 验证；本地自动恢复产物仍留在 `run/recovered`。但“存在业务版”不表示目标模组成功分支已经完整；每份文件都必须以已触发的副作用和最终对象身份为完成标准。
+指令级 `readable.lua` 仍保留虚拟寄存器、PC 标签和大量 VM 控制流，因此不能直接视为可维护 Lua。第二阶段以这些文件和动态 trace 为证据，将代码重新组织成 `*.business.lua`。历史研究曾覆盖 10 份脚本；当前 `business/` 只保存与本轮 `run/code/` 输入集合一致的可复核副本，并用 `tests/test_business_lua.py` 验证。本地自动恢复产物仍留在 `run/recovered`。但“存在业务版”不表示目标模组成功分支已经完整；每份文件都必须以已触发的副作用和最终对象身份为完成标准。
 
 这一阶段遵循四级证据：
 
@@ -308,8 +308,8 @@ Main 中恢复出的九个目标 workshop ID 为：
 
 | 路径 | 内容 |
 |---|---|
-| `business/*.business.lua` | 受版本控制、去除 VM 控制流后的 10 份高层语义重建 |
-| `recovered/readable/*.business.lua` | 源分析工作区中的原始人工重建位置 |
+| `business/*.business.lua` | 受版本控制、与当前输入集合一致的高层语义重建 |
+| `business/README.md` | 当前业务文件索引、哈希失效规则和完成条件 |
 | `recovered/*.recovered.lua` | 每个 closure context 的指令级伪 Lua |
 | `recovered/readable/*.focus.lua` | 按强领域常量筛选的优先阅读子集 |
 | `recovered/readable/*.readable.lua` | 标准化、分块并局部传播后的完整可读控制流伪 Lua |

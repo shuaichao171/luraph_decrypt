@@ -14,6 +14,17 @@ business 业务语义还原的完整操作流程见
 [BUSINESS_RECOVERY.md](BUSINESS_RECOVERY.md)；完整案例、字段证据和精度边界见
 [RECOVERY.md](RECOVERY.md)。
 
+## 默认完成标准
+
+除非任务明确只要求 LPH 解码、VM trace、handler、CFG 或 readable 中间产物，
+本项目中的“解密/还原”默认必须继续到 `business/*.business.lua`：对输入目录中的
+每一份 Lua 给出证据约束的高层业务重建，并通过对应业务合同测试。仅生成
+`*.recovered.lua`、`*.readable.lua` 或 `*.focus.lua` 不算完成。
+
+`run_recovery.ps1` 和 `run_all.ps1` 负责生成并审计 VM/CFG 中间证据；business 阶段
+仍需按 [BUSINESS_RECOVERY.md](BUSINESS_RECOVERY.md) 运行窄夹具、确认成功与负向
+分支、编写高层 Lua 并补齐合同测试，不能从字段名直接猜测副作用。
+
 ## 环境要求
 
 - Windows PowerShell 5.1 或 PowerShell 7；
@@ -32,7 +43,7 @@ luraph_decrypt/
   README.md                 本文件：方法、逻辑和快速使用
   BUSINESS_RECOVERY.md      从 VM 产物到 business.lua 的证据化还原流程
   RECOVERY.md               当前项目的完整恢复记录
-  business/                 10 份受版本控制的高层业务语义重建
+  business/                 当前输入对应、受版本控制的高层业务语义重建
     README.md               业务文件索引、覆盖范围和验证方法
     *.business.lua          人工证据约束的可读 Lua
   run_recovery.ps1          恢复一个 Luraph Lua
@@ -64,7 +75,7 @@ luraph_decrypt/
 
 ## 快速开始
 
-恢复单个文件并生成 readable/CFG，再运行审计：
+恢复单个文件并生成 readable/CFG 中间证据，再运行 VM/CFG 审计：
 
 ```powershell
 cd C:\Users\shuaichao\Desktop\ai-work\luraph_decrypt
@@ -80,6 +91,9 @@ cd C:\Users\shuaichao\Desktop\ai-work\luraph_decrypt
     -SourceDirectory .\run\code `
     -OutputRoot .\run\recovered
 ```
+
+上述命令完成后还必须继续执行 business 探针、重建和合同测试；除非任务明确限定
+只要中间层，否则不能在这里结束。
 
 复用已有 program IR，只重新生成 handler/listing：
 

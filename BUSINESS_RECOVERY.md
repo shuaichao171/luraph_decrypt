@@ -9,6 +9,9 @@ business 还原不是再次“解密”。LPH 解码和 VM 去虚拟化只能得
 指令、常量、分支、closure 和外部调用。business 阶段要用受控运行实验确认对象
 身份、参数、返回值和最终副作用，再把这些证据重写成可读的高层 Lua。
 
+在本仓库中，“解密/还原”默认包含这一阶段。除非任务明确限定只交付 VM/CFG
+中间证据，否则每个输入都必须生成对应的 `*.business.lua` 并通过业务合同测试。
+
 ## 1. 输出的含义
 
 各类产物代表不同层级：
@@ -50,9 +53,10 @@ cd C:\Users\shuaichao\Desktop\ai-work\luraph_decrypt
 | environment JSON | 控制全局 registry、API、玩家和库存对象 |
 | 每次探针的 JSON 输出 | 保存直接动态证据 |
 
-本仓库已经在 `business/` 提供 10 份已完成的高层案例，并在
-`tests/test_business_lua.py` 提供对应合同测试；`run/recovered/` 仍用于本地
-生成可审计的 VM 中间产物。
+本轮 `business/` 按 `run/code/` 的输入集合提供 Main、Legion 和 Xuaner_Myxl
+三份高层重建；`tests/test_business_lua.py` 会检查输入与 business 文件名集合
+完全一致，并执行存在文件的对应合同测试。`run/recovered/` 仍用于本地生成
+可审计的 VM 中间产物。
 
 关键脚本：
 
